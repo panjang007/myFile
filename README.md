@@ -1,0 +1,2 @@
+# myFile
+wargames myFile challenge
